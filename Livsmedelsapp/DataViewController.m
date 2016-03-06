@@ -22,83 +22,6 @@
 }
 - (IBAction)getData:(id)sender {
     
-    [self.view endEditing:YES];
-    
-    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff?query=%@",self.searchTerm.text];
-    
-    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
-    
-    NSURL *url = [NSURL URLWithString:s];
-    
-    
-    // NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"",self.serchTime.text]];
-    
-    
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                                                
-                                                
-                                                
-                                                if (error) {
-                                                    NSLog(@"Error: %@",error);
-                                                    return;
-                                                }
-                                                
-                                                NSError *jsonParseError = nil;
-                                                
-                                                
-                                                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
-                                                
-                                                
-                                                if(jsonParseError){
-                                                    NSLog(@"failed data : %@",jsonParseError);
-                                                    return;
-                                                    
-                                                }
-                                                
-                                                NSLog(@"%@",result);
-                                                
-                                                /*
-                                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                                 
-                                                 NSArray *topics = result[@"RelatedTopics"];
-                                                 
-                                                 if(topics.count==0){
-                                                 
-                                                 self.answer.text= @"No related topics";
-                                                 
-                                                 }else{
-                                                 
-                                                 NSDictionary *firstTopic = topics[0];
-                                                 NSString *text = firstTopic[@"Text"];
-                                                 NSDictionary *icon = firstTopic[@"Icon"];
-                                                 
-                                                 
-                                                 NSString *iconUrl = icon[@"URL"];
-                                                 
-                                                 NSURL * imageURL = [NSURL URLWithString:iconUrl];
-                                                 NSData * imageData = [NSData dataWithContentsOfURL:imageURL];
-                                                 UIImage * image = [UIImage imageWithData:imageData];
-                                                 
-                                                 self.img.image = image;
-                                                 
-                                                 self.answer.text = text;
-                                                 }
-                                                 
-                                                 });*/
-                                                
-                                            }];
-    [task resume];
-
-    
-    
-    
-    
     
 }
 - (IBAction)getName:(id)sender {
@@ -160,22 +83,12 @@
                      
                      NSLog(@"%@",number);
                      
-                     
-                     
-                     
-                 
                  }
-             
-             
              
              });
             
         }];
     [task resume];
-    
-    
-
-    
 }
 
 
@@ -252,6 +165,71 @@
     [task resume];
     
 }
+
+-(void) getDetailWithNumberForCell:(int)number{
+    
+    
+    
+    [self.view endEditing:YES];
+    
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
+    
+    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
+    
+    NSURL *url = [NSURL URLWithString:s];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+                                                
+                                                
+                                                if (error) {
+                                                    NSLog(@"Error: %@",error);
+                                                    return;
+                                                }
+                                                
+                                                
+                                                NSError *jsonParseError = nil;
+                                                
+                                                
+                                                NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+                                                
+                                                
+                                                if(jsonParseError){
+                                                    NSLog(@"failed data : %@",jsonParseError);
+                                                    return;
+                                                    
+                                                }
+                                                NSLog(@"what we got: %@",detail);
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    // get each detaljer
+                                                    
+                                                    NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
+                                                    NSLog(@" nutrition is %@",nutrientValues);
+                                                    NSString* energi = [nutrientValues objectForKey:@"energyKj"];
+                                                    NSLog(@" energi is %@",energi);
+                                                    NSString* protein = [nutrientValues objectForKey:@"protein"];
+                                                   
+                                            
+                                                    [LivsmedelTableViewController singletonTVC].cell.energi.text=[NSString stringWithFormat:@"%@",energi];
+                                                    
+                                                    [LivsmedelTableViewController singletonTVC].cell.protein.text= [NSString stringWithFormat:@"%@",protein];
+                                                    [[LivsmedelTableViewController singletonTVC].view reloadInputViews];
+                                                    
+                                                    
+                                                    //[[LivsmedelTableViewController singletonTVC].tableView reloadData];
+                                                    
+                                                });
+                                                
+                                            }];
+    [task resume];
+    
+}
+
 
 -(void) testReturn:(NSString*)str{
     

@@ -12,5 +12,6 @@
 @interface DataViewController : UIViewController
 -(void)getAllData;
 -(void) getDetailWithNumber:(int)number;
+-(void) getDetailWithNumberForCell:(int)number;
 @property(nonatomic)NSString *testString;
 @end

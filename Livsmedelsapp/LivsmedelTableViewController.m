@@ -134,7 +134,7 @@
     NSLog(@"%@",getFoodNumber);
     
     
-    //[dataViewController getDetailWithNumber:[getFoodNumber intValue]];
+    //[dataViewController getDetailWithNumberForCell:[getFoodNumber intValue]];
     //[self.tableView reloadData];
     
 
@@ -142,7 +142,7 @@
     // memo number? 場所じゃなくて番号
     _cell.foodName.text = getFoodName;
     //_cell.energi.text = [NSString stringWithFormat:@"%@",getFoodNumber];
-
+    [dataViewController getDetailWithNumberForCell:[getFoodNumber intValue]];
     
     
     
