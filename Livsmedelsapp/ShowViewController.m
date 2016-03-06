@@ -7,6 +7,7 @@
 //
 
 #import "ShowViewController.h"
+#import "DataViewController.h"
 
 @interface ShowViewController ()
 
@@ -14,8 +15,49 @@
 
 @implementation ShowViewController
 
+
+
++(ShowViewController*)singletonSVC{
+    
+    static ShowViewController *theSVC = nil;
+    
+    if(!theSVC){
+        theSVC = [[super allocWithZone:nil]init];
+    }
+    
+    return theSVC;
+}
+
++(id) allocWithZone:(NSZone *)zone{
+    return [self singletonSVC];
+}
+
+-(id) init{
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    DataViewController* d =[[DataViewController alloc]init];
+    
+    //self.protein.text = [NSString stringWithFormat:@"%@",[self.oneFood objectForKey:@"number"]];
+    
+    
+    int num = [[self.oneFood objectForKey:@"number"] intValue];
+    NSLog(@"numnuum is %d",num);
+
+    [d getDetailWithNumber:num];
+    
+    
     // Do any additional setup after loading the view.
 }
 

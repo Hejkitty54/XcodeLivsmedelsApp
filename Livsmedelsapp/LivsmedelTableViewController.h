@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomTableViewCell.h"
-@interface LivsmedelTableViewController : UITableViewController
+@interface LivsmedelTableViewController : UITableViewController <UISearchResultsUpdating>
+@property NSMutableArray *aWholeData;
+@property NSMutableArray *energiData;
++(LivsmedelTableViewController*)singletonTVC;
+@property NSString *energi;
 
+@property CustomTableViewCell *cell;
 @end

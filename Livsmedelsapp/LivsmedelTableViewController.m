@@ -8,23 +8,74 @@
 
 #import "LivsmedelTableViewController.h"
 #import "ShowViewController.h"
+#import "DataViewController.h"
 
 @interface LivsmedelTableViewController ()
-@property(nonatomic) NSMutableArray *testData;
-@property(nonatomic) NSDictionary *testUnit;
+
+@property UISearchController *searchController;
+@property NSArray *searchResult;
 @end
 
 @implementation LivsmedelTableViewController
 
++(LivsmedelTableViewController*)singletonTVC{
+
+    static LivsmedelTableViewController *theTVC = nil;
+    
+    if(!theTVC){
+        theTVC = [[super allocWithZone:nil]init];
+    }
+    
+    return theTVC;
+}
+
++(id) allocWithZone:(NSZone *)zone{
+    return [self singletonTVC];
+}
+
+-(id) init{
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.testData=@[@{@"name":@"Carrot",@"energi":@"250",@"protein":@"2.6",@"fat":@"3.4"},
-                    @{@"name":@"Onion",@"energi":@"20",@"protein":@"1",@"fat":@"1.2"},
-                    @{@"name":@"Pork",@"energi":@"500",@"protein":@"5.6",@"fat":@"56"},
-                    @{@"name":@"Tomato",@"energi":@"25",@"protein":@"3",@"fat":@"2"}
-                    ].mutableCopy;
     
-    self.testUnit=@{@"energi":@"%",@"protein":@"g",@"fat":@"cal"};
+    // get data
+    DataViewController *dataViewController =[[DataViewController alloc]init];
+    
+    if (!_aWholeData) {
+        _aWholeData= [[NSMutableArray alloc]init];
+
+    }
+    if (!_energiData) {
+        _energiData= [[NSMutableArray alloc]init];
+        
+    }
+    //get all data
+    [dataViewController getAllData];
+ 
+    
+    self.searchController=[[UISearchController alloc]initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.definesPresentationContext = YES;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+}
+
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController{
+    
+    NSString* seachText = searchController.searchBar.text;
+    
+    NSPredicate *findFoodWithName = [NSPredicate predicateWithFormat:@"name contains[c] %@",seachText];
+    
+    self.searchResult = [self.aWholeData filteredArrayUsingPredicate:findFoodWithName];
+    
+    [self.tableView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,38 +91,63 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return self.testData.count;
+  
+    if(self.searchController.isActive&&self.searchController.searchBar.text.length > 0){
+         return self.searchResult.count;
+    }else{
+    
+        return self.aWholeData.count;
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    
+    DataViewController* dataViewController =[[DataViewController alloc]init];
+    
+    
     static NSString *cellIdentifier = @"myCell";
     
-    CustomTableViewCell *cell = (CustomTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    _cell = (CustomTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    if (!cell)
+    if (!_cell)
     {
-        cell=[[CustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        _cell=[[CustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
     
-    NSDictionary *oneDictionary = self.testData[[indexPath row]];
-    NSString *oneName = [oneDictionary objectForKey:@"name"];
-    NSString *oneEnergi = [oneDictionary objectForKey:@"energi"];
-    NSString *oneProtein = [oneDictionary objectForKey:@"protein"];
-    cell.foodName.text = oneName;
-    cell.energi.text= oneEnergi;
-    cell.protein.text=oneProtein;
+    NSDictionary *activeFood;
     
-    // sets units
-    NSString *energiUnit =[self.testUnit objectForKey:@"energi"];
-    NSString *proteinUnit =[self.testUnit objectForKey:@"protein"];
-    cell.energiUnit.text = energiUnit;
-    cell.proteinUnit.text= proteinUnit;
-    return cell;
+    if(self.searchController.isActive&&self.searchController.searchBar.text.length > 0){
+        activeFood = self.searchResult[[indexPath row]];
+        
+    }else{
+
+        activeFood = self.aWholeData[[indexPath row]];
+       
+    }
+    NSString *getFoodName = [activeFood objectForKey:@"name"];
+    NSString *getFoodNumber = [activeFood objectForKey:@"number"];
+    NSLog(@"%@",getFoodName);
+    NSLog(@"%@",getFoodNumber);
+    
+    
+    //[dataViewController getDetailWithNumber:[getFoodNumber intValue]];
+    //[self.tableView reloadData];
+    
+
+    
+    // memo number? 場所じゃなくて番号
+    _cell.foodName.text = getFoodName;
+    //_cell.energi.text = [NSString stringWithFormat:@"%@",getFoodNumber];
+
+    
+    
+    
+    _cell.foodData = activeFood;
+    return _cell;
 }
 
 
@@ -116,17 +192,23 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     ShowViewController *showViewController = segue.destinationViewController;
+   
     
     if([segue.identifier isEqualToString:@"show"]){
-        UITableViewCell *cell = sender;
-        NSIndexPath *path = [self.tableView indexPathForCell:cell];
-        NSDictionary *positionFood = self.testData[path.row];
-        NSString *oneName = [positionFood objectForKey:@"name"];
-        showViewController.title = oneName;
+        CustomTableViewCell *cell = sender;
         
-    } else if([segue.identifier isEqualToString:@"favorites"]){
+        NSIndexPath *path = [self.tableView indexPathForCell:cell];
+        NSDictionary *positionFood = self.aWholeData[path.row];
+        //NSString *oneName = [positionFood objectForKey:@"name"];
+        
+        showViewController.oneFood= positionFood;
+        
+        showViewController.title = cell.foodData[@"name"];
+        
+        
+    }
     
-    }else{
+    else{
         
         assert(NO);
     }

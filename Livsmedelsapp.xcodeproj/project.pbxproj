@@ -16,6 +16,7 @@
 		7F1F28D61C830DED004EAD0C /* LivsmedelTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28D51C830DED004EAD0C /* LivsmedelTableViewController.m */; };
 		7F1F28D91C830E2B004EAD0C /* ShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28D81C830E2B004EAD0C /* ShowViewController.m */; };
 		7F1F28DC1C83323E004EAD0C /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28DB1C83323E004EAD0C /* CustomTableViewCell.m */; };
+		7F1F29081C8773C3004EAD0C /* DataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F29071C8773C3004EAD0C /* DataViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		7F1F28D81C830E2B004EAD0C /* ShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowViewController.m; sourceTree = "<group>"; };
 		7F1F28DA1C83323E004EAD0C /* CustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableViewCell.h; sourceTree = "<group>"; };
 		7F1F28DB1C83323E004EAD0C /* CustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableViewCell.m; sourceTree = "<group>"; };
+		7F1F29061C8773C3004EAD0C /* DataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataViewController.h; sourceTree = "<group>"; };
+		7F1F29071C8773C3004EAD0C /* DataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				7F1F28D81C830E2B004EAD0C /* ShowViewController.m */,
 				7F1F28DA1C83323E004EAD0C /* CustomTableViewCell.h */,
 				7F1F28DB1C83323E004EAD0C /* CustomTableViewCell.m */,
+				7F1F29061C8773C3004EAD0C /* DataViewController.h */,
+				7F1F29071C8773C3004EAD0C /* DataViewController.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F1F29081C8773C3004EAD0C /* DataViewController.m in Sources */,
 				7F1F28C51C830A74004EAD0C /* ViewController.m in Sources */,
 				7F1F28D91C830E2B004EAD0C /* ShowViewController.m in Sources */,
 				7F1F28DC1C83323E004EAD0C /* CustomTableViewCell.m in Sources */,
@@ -317,6 +323,7 @@
 				7F1F28D31C830A74004EAD0C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
