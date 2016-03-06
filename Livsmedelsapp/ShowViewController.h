@@ -15,5 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *vitamin;
 @property(nonatomic) NSString* number;
 @property NSDictionary *oneFood;
+@property (weak, nonatomic) IBOutlet UISwitch *isFavorite;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "ShowViewController.h"
 #import "DataViewController.h"
+#import "FavoriteTableViewController.h"
 
 @interface ShowViewController ()
 
@@ -58,7 +59,17 @@
     [d getDetailWithNumber:num];
     
     
+    
+   
+    
     // Do any additional setup after loading the view.
+}
+- (IBAction)isFavorite:(id)sender {
+  
+    if (self.isFavorite.on) {
+        [[FavoriteTableViewController singletonFav].favorites addObject:self.title];
+        NSLog(@"favorite %@ is added",self.title);
+    }
 }
 
 - (void)didReceiveMemoryWarning {
