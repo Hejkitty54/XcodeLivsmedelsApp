@@ -7,6 +7,7 @@
 //
 
 #import "FavoriteTableViewController.h"
+#import "FavoriteDetailViewController.h"
 
 @interface FavoriteTableViewController ()
 
@@ -43,15 +44,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   
+    
     if(!_favorites){
         _favorites = [[NSMutableArray alloc]init];
     }
-     NSLog(@"favorite test %@",self.favorites);
+   
+    
+    
+     NSLog(@"favorite test");
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (NSMutableArray*) favorites {
+    if(!_favorites) {
+        
+        _favorites  = [[NSMutableArray alloc] init];
+    }
+    
+    return _favorites;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,9 +94,8 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"favorite" forIndexPath:indexPath];
     
-    cell.textLabel.text=self.favorites[[indexPath row] ];
-    //self.favorites[[indexPath row] ];
-    // Configure the cell...
+    cell.textLabel.text=[self.favorites[[indexPath row]] objectForKey:@"name"];
+  
    
     
     return cell;
@@ -122,14 +136,23 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    FavoriteDetailViewController* fvc = segue.destinationViewController;
+    UITableViewCell *cell = sender;
+    
+    NSIndexPath *path = [self.tableView indexPathForCell:cell];
+    NSDictionary *favoriteFood = self.favorites[path.row];
+    
+    fvc.favoriteFood= favoriteFood;
+    
+    fvc.title = favoriteFood[@"name"];
+  
 }
-*/
+
 
 @end

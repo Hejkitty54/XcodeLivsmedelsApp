@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ShowViewController : UIViewController
-+(ShowViewController*)singletonSVC;
+//+(ShowViewController*)singletonSVC;
 @property (weak, nonatomic) IBOutlet UILabel *protein;
 @property (weak, nonatomic) IBOutlet UILabel *fat;
 @property (weak, nonatomic) IBOutlet UILabel *vitamin;

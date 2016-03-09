@@ -8,12 +8,14 @@
 
 #import "LivsmedelTableViewController.h"
 #import "ShowViewController.h"
-#import "DataViewController.h"
+
 
 @interface LivsmedelTableViewController ()
 
 @property UISearchController *searchController;
 @property NSArray *searchResult;
+@property NSInteger isThereTest;
+
 @end
 
 @implementation LivsmedelTableViewController
@@ -37,15 +39,13 @@
     self = [super init];
     if (self) {
         
+        
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // get data
-    DataViewController *dataViewController =[[DataViewController alloc]init];
     
     if (!_aWholeData) {
         _aWholeData= [[NSMutableArray alloc]init];
@@ -56,8 +56,20 @@
         
     }
     //get all data
+    DataViewController *dataViewController =[[DataViewController alloc]init];
     [dataViewController getAllData];
- 
+    NSLog(@"den här körs först? %lu",self.dataCount);
+    
+   
+    /*
+    // デフォルトの通知センターを取得する
+    _nc = [NSNotificationCenter defaultCenter];
+    
+    // 通知センターに通知要求を登録する
+    // この例だと、通知センターに"Tuchi"という名前の通知がされた時に、hogeメソッドを呼び出すという通知要求の登録を行っている。
+    [_nc addObserver:self selector:@selector(hoge:) name:@"Tuchi" object:nil];
+    */
+   
     
     self.searchController=[[UISearchController alloc]initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -65,6 +77,7 @@
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.tableView.tableHeaderView = self.searchController.searchBar;
 }
+
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController{
     
@@ -103,13 +116,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+ 
     
     DataViewController* dataViewController =[[DataViewController alloc]init];
     
     
     static NSString *cellIdentifier = @"myCell";
-    
+    // ska testa att inte spara ett cell
     _cell = (CustomTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (!_cell)
@@ -128,27 +141,24 @@
         activeFood = self.aWholeData[[indexPath row]];
        
     }
+    // get name for every cell
     NSString *getFoodName = [activeFood objectForKey:@"name"];
     NSString *getFoodNumber = [activeFood objectForKey:@"number"];
     NSLog(@"%@",getFoodName);
     NSLog(@"%@",getFoodNumber);
     
-    
-    //[dataViewController getDetailWithNumberForCell:[getFoodNumber intValue]];
-    //[self.tableView reloadData];
-    
-
-    
-    // memo number? 場所じゃなくて番号
+    // set name for every cell
     _cell.foodName.text = getFoodName;
-    //_cell.energi.text = [NSString stringWithFormat:@"%@",getFoodNumber];
-    [dataViewController getDetailWithNumberForCell:[getFoodNumber intValue]];
     
     
-    
+     // set energi and protein for every cell
+    [dataViewController getDetailWithNumberForCell:[getFoodNumber intValue] cell:_cell];
+
     _cell.foodData = activeFood;
+
     return _cell;
 }
+
 
 
 /*

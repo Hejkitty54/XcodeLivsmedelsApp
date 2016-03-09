@@ -20,10 +20,7 @@
      self.testString=@"";
     // Do any additional setup after loading the view.
 }
-- (IBAction)getData:(id)sender {
-    
-    
-}
+
 - (IBAction)getName:(id)sender {
     
     
@@ -91,84 +88,7 @@
     [task resume];
 }
 
-
-
--(void) getDetailWithNumber:(int)number{
-    
-  
-    
-    [self.view endEditing:YES];
-    
-    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
-    
-    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
-    
-    NSURL *url = [NSURL URLWithString:s];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                                                
-                                                        
-                                                        
-            if (error) {
-                NSLog(@"Error: %@",error);
-                return;
-            }
-            
-            
-            NSError *jsonParseError = nil;
-            
-            
-            NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
-            
-            
-            if(jsonParseError){
-                NSLog(@"failed data : %@",jsonParseError);
-                return;
-                
-            }
-             NSLog(@"what we got: %@",detail);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // get each detaljer
-                
-                NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
-                NSLog(@" nutrition is %@",nutrientValues);
-                NSString* energi = [nutrientValues objectForKey:@"energyKj"];
-                NSLog(@" energi is %@",energi);
-                NSString* protein = [nutrientValues objectForKey:@"protein"];
-                NSString* fett = [nutrientValues objectForKey:@"fat"];
-                NSString* vitamin = [nutrientValues objectForKey:@"vitaminC"];
-                
-                //ShowViewController* s = [[ShowViewController alloc]init];
-                [ShowViewController singletonSVC].protein.text= [NSString stringWithFormat:@"%@",protein];
-                [ShowViewController singletonSVC].fat.text= [NSString stringWithFormat:@"%@",fett];
-                [ShowViewController singletonSVC].vitamin.text= [NSString stringWithFormat:@"%@",vitamin];
-                [[ShowViewController singletonSVC].view reloadInputViews];
-                
-                
-                //[LivsmedelTableViewController singletonTVC].cell.foodName.text=energi;
-                //NSDictionary* nutritions = @{@"number":[NSString stringWithFormat:@"%lu", number],@"energi":energi,
-                // @"protein":protein,@"fat":fett,@"vitamin":vitamin};
-                //[[LivsmedelTableViewController singletonTVC].energiData addObject:nutritions];
-                
-                //[LivsmedelTableViewController singletonTVC].cell.energi.text=energi;
-                
-                //[[LivsmedelTableViewController singletonTVC].tableView reloadData];
-                
-            });
-            
-        }];
-    [task resume];
-    
-}
-
--(void) getDetailWithNumberForCell:(int)number{
-    
-    
+-(void) sendDetailWithNumber:(int)number{
     
     [self.view endEditing:YES];
     
@@ -213,15 +133,14 @@
                                                     NSString* energi = [nutrientValues objectForKey:@"energyKj"];
                                                     NSLog(@" energi is %@",energi);
                                                     NSString* protein = [nutrientValues objectForKey:@"protein"];
-                                                   
-                                            
-                                                    [LivsmedelTableViewController singletonTVC].cell.energi.text=[NSString stringWithFormat:@"%@",energi];
+                                              
                                                     
-                                                    [LivsmedelTableViewController singletonTVC].cell.protein.text= [NSString stringWithFormat:@"%@",protein];
+                                                    NSDictionary* nutrition =@{@"Energi":energi,@"Protein":protein};
+                                                    
+                                                    [[LivsmedelTableViewController singletonTVC].aWholeDataNutritions addObject:nutrition];
+                                                  
                                                     [[LivsmedelTableViewController singletonTVC].view reloadInputViews];
-                                                    
-                                                    
-                                                    //[[LivsmedelTableViewController singletonTVC].tableView reloadData];
+                                            
                                                     
                                                 });
                                                 
@@ -231,11 +150,138 @@
 }
 
 
--(void) testReturn:(NSString*)str{
+// show protein and energi i ShowViewController
+-(void) getDetailWithNumber:(int)number uiVC:(UIViewController*)vc{
     
-    self.testString = str;
+    [self.view endEditing:YES];
+    
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
+    
+    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
+    
+    NSURL *url = [NSURL URLWithString:s];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+            if (error) { NSLog(@"Error: %@",error); return; }
+            
+            
+            NSError *jsonParseError = nil;
+            
+            
+            NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+            
+            
+            if(jsonParseError){
+                NSLog(@"failed data : %@",jsonParseError);
+                return;
+                
+            }
+             NSLog(@"what we got: %@",detail);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // get each detaljer
+                
+                NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
+                NSLog(@" nutrition is %@",nutrientValues);
+                NSString* energi = [nutrientValues objectForKey:@"energyKj"];
+                NSLog(@" energi is %@",energi);
+                NSString* protein = [nutrientValues objectForKey:@"protein"];
+                NSString* fett = [nutrientValues objectForKey:@"fat"];
+                NSString* vitamin = [nutrientValues objectForKey:@"vitaminC"];
+                
+                ShowViewController* svc = (ShowViewController*)vc;
+                FavoriteDetailViewController* fvc = (FavoriteDetailViewController*)vc;
+                
+                    if ([vc isKindOfClass:[ShowViewController class]]) {
+                        
+                        svc.protein.text= [NSString stringWithFormat:@"%@",protein];
+                        svc.fat.text= [NSString stringWithFormat:@"%@",fett];
+                        svc.vitamin.text= [NSString stringWithFormat:@"%@",vitamin];
+                        NSLog(@"körs här?");
+                    
+                    } else if ([vc isKindOfClass:[FavoriteDetailViewController class]]){
+                    
+                        fvc.detail.text =[NSString stringWithFormat:@"%@",nutrientValues];
+                    NSLog(@"och körs här?");
+                    
+                    }
+                
+            });
+            
+        }];
+    [task resume];
+    
 }
 
+// sets energi and protein for every cell in LivsmedelTableViewContoller
+-(void) getDetailWithNumberForCell:(int)number cell:(CustomTableViewCell*)cell {
+    
+    [self.view endEditing:YES];
+    
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
+    
+    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
+    
+    NSURL *url = [NSURL URLWithString:s];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+                                                
+            
+            if (error) {
+                NSLog(@"Error: %@",error);
+                return;
+            }
+            
+            
+            NSError *jsonParseError = nil;
+            
+            
+            NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+            
+            
+            if(jsonParseError){
+                NSLog(@"failed data : %@",jsonParseError);
+                return;
+                
+            }
+            //NSLog(@"what we got: %@",detail);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // get each detaljer
+                
+                NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
+                NSLog(@" nutrition is %@",nutrientValues);
+                NSString* energi = [nutrientValues objectForKey:@"energyKj"];
+                NSLog(@" energi is %@",energi);
+                NSString* protein = [nutrientValues objectForKey:@"protein"];
+               
+                // skicka med cell istället för singleton
+                cell.energi.text=[NSString stringWithFormat:@"%@",energi];
+      
+                cell.protein.text= [NSString stringWithFormat:@"%@",protein];
+                
+                 NSLog(@"test if there is protein %@ %@",[LivsmedelTableViewController singletonTVC].cell.protein.text,[NSString stringWithFormat:@"%@",protein]);
+                
+                [[LivsmedelTableViewController singletonTVC].cell reloadInputViews];
+                
+            });
+            
+        }];
+    [task resume];
+    
+}
+
+// get all data from internet and save it in NSMutable array i LivsmedelTableViewController
 -(void)getAllData{
 
     [self.view endEditing:YES];

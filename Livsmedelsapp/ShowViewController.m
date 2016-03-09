@@ -14,60 +14,35 @@
 
 @end
 
-@implementation ShowViewController
-
-
-
-+(ShowViewController*)singletonSVC{
-    
-    static ShowViewController *theSVC = nil;
-    
-    if(!theSVC){
-        theSVC = [[super allocWithZone:nil]init];
-    }
-    
-    return theSVC;
+@implementation ShowViewController{
+    int num;
 }
-
-+(id) allocWithZone:(NSZone *)zone{
-    return [self singletonSVC];
-}
-
--(id) init{
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
-
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     DataViewController* d =[[DataViewController alloc]init];
     
-    //self.protein.text = [NSString stringWithFormat:@"%@",[self.oneFood objectForKey:@"number"]];
+    // get a number from saved dictionary @{name number}
+    num = [[self.oneFood objectForKey:@"number"] intValue];
     
+    // shows detail
+    [d getDetailWithNumber:num uiVC:self];
+  
     
-    int num = [[self.oneFood objectForKey:@"number"] intValue];
-    NSLog(@"numnuum is %d",num);
-
-    [d getDetailWithNumber:num];
-    
-    
-    
-   
-    
-    // Do any additional setup after loading the view.
 }
+
 - (IBAction)isFavorite:(id)sender {
   
+    // if favorite is on it is added to favorites list in Favorite table view.
     if (self.isFavorite.on) {
-        [[FavoriteTableViewController singletonFav].favorites addObject:self.title];
+        
+        NSDictionary* foodObject = @{@"name":self.title,@"number":[NSString stringWithFormat:@"%d",num]};
+          
+        [[FavoriteTableViewController singletonFav].favorites addObject:foodObject];
+        
+        [[FavoriteTableViewController singletonFav].tableView reloadData];
+        
         NSLog(@"favorite %@ is added",self.title);
     }
 }

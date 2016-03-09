@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "LivsmedelTableViewController.h"
 #import "ShowViewController.h"
+#import "FavoriteDetailViewController.h"
 @interface DataViewController : UIViewController
 -(void)getAllData;
--(void) getDetailWithNumber:(int)number;
--(void) getDetailWithNumberForCell:(int)number;
+-(void) getDetailWithNumber:(int)number uiVC:(UIViewController*)vc;
+-(void) getDetailWithNumberForCell:(int)number cell:(CustomTableViewCell*)cell;
+-(void) sendDetailWithNumber:(int)number;
 @property(nonatomic)NSString *testString;
 @end

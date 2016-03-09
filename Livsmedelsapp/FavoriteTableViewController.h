@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface FavoriteTableViewController : UITableViewController
-@property NSMutableArray* favorites;
+@property (nonatomic) NSMutableArray* favorites;
 +(FavoriteTableViewController*)singletonFav;
 @end
