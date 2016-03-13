@@ -9,6 +9,7 @@
 #import "SaveLoadViewController.h"
 
 @interface SaveLoadViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *cherry;
 
 @end
 
@@ -16,7 +17,42 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+  
+    
+}
+-(void)viewDidLayoutSubviews{
+    
+    UIView* square =[[UIView alloc]initWithFrame:CGRectMake(10, 10, 6, 6)];
+    [square setBackgroundColor:[UIColor orangeColor]];
+    [self.view addSubview:square];
+    
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    self.gravity = [[UIGravityBehavior alloc]initWithItems:@[square]];
+    
+    // add behavior
+    [self.animator addBehavior:self.gravity];
+
+
+}
+- (IBAction)onTap:(UITapGestureRecognizer*)sender {
+    
+    CGPoint touchPosition = [sender locationInView:self.view];
+    
+    float diffX = touchPosition.x - self.cherry.center.x;
+    float diffY = touchPosition.y - self.cherry.center.y;
+    float distance = sqrt(diffX*diffX + diffY*diffY);
+    float t = distance/300.0f;
+    
+    [UIView beginAnimations:nil context:nil];
+    
+    [UIView setAnimationDuration:t];
+    [UIView setAnimationDelay:0.0];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    
+    self.cherry.center = touchPosition;
+    
+    [UIView commitAnimations];
 }
 
 - (void)didReceiveMemoryWarning {

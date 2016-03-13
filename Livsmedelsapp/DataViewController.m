@@ -193,6 +193,8 @@
                 NSString* protein = [nutrientValues objectForKey:@"protein"];
                 NSString* fett = [nutrientValues objectForKey:@"fat"];
                 NSString* vitamin = [nutrientValues objectForKey:@"vitaminC"];
+                NSString* salt = [nutrientValues objectForKey:@"salt"];
+                NSString* zink = [nutrientValues objectForKey:@"zink"];
                 
                 ShowViewController* svc = (ShowViewController*)vc;
                 FavoriteDetailViewController* fvc = (FavoriteDetailViewController*)vc;
@@ -202,12 +204,14 @@
                         svc.protein.text= [NSString stringWithFormat:@"%@",protein];
                         svc.fat.text= [NSString stringWithFormat:@"%@",fett];
                         svc.vitamin.text= [NSString stringWithFormat:@"%@",vitamin];
-                        NSLog(@"körs här?");
+                        svc.salt.text = [NSString stringWithFormat:@"%@",salt];
+                        svc.zink.text = [NSString stringWithFormat:@"%@",zink];
+                       
                     
                     } else if ([vc isKindOfClass:[FavoriteDetailViewController class]]){
                     
                         fvc.detail.text =[NSString stringWithFormat:@"%@",nutrientValues];
-                    NSLog(@"och körs här?");
+                   
                     
                     }
                 
@@ -286,7 +290,11 @@
 
     [self.view endEditing:YES];
     
+    //NSString *escaped = [@"http://www.matapi.se/foodstuff?nutrient" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSURL *url = [NSURL URLWithString:@"http://www.matapi.se/foodstuff?nutrient"];
+    
+    
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     

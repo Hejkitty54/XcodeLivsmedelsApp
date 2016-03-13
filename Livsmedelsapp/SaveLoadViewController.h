@@ -10,6 +10,8 @@
 #import "FavoriteTableViewController.h"
 
 @interface SaveLoadViewController : UIViewController
+@property (nonatomic) UIDynamicAnimator *animator;
+@property (nonatomic) UIGravityBehavior *gravity;
 -(void)save;
 -(void)load;
 @end

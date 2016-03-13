@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ShowViewController : UIViewController
+@interface ShowViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *foodImg;
 //+(ShowViewController*)singletonSVC;
 @property (weak, nonatomic) IBOutlet UILabel *protein;
 @property (weak, nonatomic) IBOutlet UILabel *fat;
 @property (weak, nonatomic) IBOutlet UILabel *vitamin;
+@property (weak, nonatomic) IBOutlet UILabel *salt;
+@property (weak, nonatomic) IBOutlet UILabel *zink;
 @property(nonatomic) NSString* number;
 @property NSDictionary *oneFood;
 @property (weak, nonatomic) IBOutlet UISwitch *isFavorite;

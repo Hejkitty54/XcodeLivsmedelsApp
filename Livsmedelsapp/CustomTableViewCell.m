@@ -11,7 +11,9 @@
 @implementation CustomTableViewCell
 
 - (void)awakeFromNib {
-    // Initialization code
+    self.foodImg.layer.cornerRadius = self.foodImg.frame.size.height /2;
+    self.foodImg.layer.masksToBounds = YES;
+    self.foodImg.layer.borderWidth = 0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
