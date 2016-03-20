@@ -12,6 +12,7 @@
 @interface LivsmedelTableViewController : UITableViewController <UISearchResultsUpdating>
 @property NSMutableArray *aWholeData;
 @property NSMutableArray *aWholeDataNutritions;
+@property NSMutableArray *aWholeDataUnit;
 @property NSMutableArray *energiData;
 +(LivsmedelTableViewController*)singletonTVC;
 @property NSString *energi;

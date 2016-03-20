@@ -23,6 +23,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //make tabbar transparent
+    //[[UITabBar appearance] setBarTintColor:[UIColor clearColor]];
+    //[[UITabBar appearance] setBackgroundImage:[UIImage new]];
+    
     return YES;
 }
 

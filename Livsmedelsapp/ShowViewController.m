@@ -11,11 +11,35 @@
 #import "FavoriteTableViewController.h"
 
 @interface ShowViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *star;
 
 @end
 
 @implementation ShowViewController{
     int num;
+}
+
+- (IBAction)tap:(UITapGestureRecognizer *)sender {
+    
+    
+    CGPoint touchPosition = [sender locationInView:self.view];
+    
+    float diffX = touchPosition.x - self.star.center.x;
+    float diffY = touchPosition.y - self.star.center.y;
+    float distance = sqrt(diffX*diffX + diffY*diffY);
+    float t = distance/300.0f;
+    
+    [UIView beginAnimations:nil context:nil];
+    
+    [UIView setAnimationDuration:t];
+    [UIView setAnimationDelay:0.0];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    
+    self.star.center = touchPosition;
+    
+    [UIView commitAnimations];
+    
+    
 }
 
 - (void)viewDidLoad {
@@ -29,8 +53,47 @@
     // shows detail
     [d getDetailWithNumber:num uiVC:self];
     
-    //camera
     
+    //set unit
+    NSDictionary* getProteinUnit;
+    NSDictionary* getFatUnit;
+    NSDictionary* getVitaminCUnit;
+    NSDictionary* getSaltUnit;
+    NSDictionary* getZinkUnit;
+    
+    
+    for(NSDictionary* dict in self.aWholeDataUnit)
+    {
+        if([[dict objectForKey:@"slug"] isEqualToString: @"protein"])
+        {
+            getProteinUnit= dict;
+        }
+        if([[dict objectForKey:@"slug"] isEqualToString: @"fat"])
+        {
+            getFatUnit= dict;
+        }
+        if([[dict objectForKey:@"slug"] isEqualToString: @"vitaminC"])
+        {
+            getVitaminCUnit= dict;
+        }
+        if([[dict objectForKey:@"slug"] isEqualToString: @"salt"])
+        {
+            getSaltUnit= dict;
+        }
+        if([[dict objectForKey:@"slug"] isEqualToString: @"zink"])
+        {
+            getZinkUnit= dict;
+        }
+    }
+    
+    self.proteinUnit.text = [getProteinUnit objectForKey:@"unit"];
+    self.fatUnit.text = [getFatUnit objectForKey:@"unit"];
+    self.vitaminCUnit.text =[getVitaminCUnit objectForKey:@"unit"];
+    self.saltUnit.text =[getSaltUnit objectForKey:@"unit"];
+    self.zinkUnit.text =[getZinkUnit objectForKey:@"unit"];
+    
+    
+    //camera
     UIImage *cachedImage = [UIImage imageWithContentsOfFile:[self imagePath]];
     
     if (cachedImage) {
@@ -39,9 +102,16 @@
         NSLog(@"No image found");
     }
     
+    
+    CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:(M_PI / 180) * 360];
+    rotationAnimation.duration = 1.0f;
+    rotationAnimation.repeatCount = HUGE_VALF;
+    [self.star.layer addAnimation:rotationAnimation forKey:@"rotateAnimation"];
    
     
 }
+
 
 - (IBAction)isFavorite:(id)sender {
     
@@ -118,6 +188,9 @@
     
     
 }
+
+
+
 
 /*
 #pragma mark - Navigation

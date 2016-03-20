@@ -10,5 +10,6 @@
 
 @interface FavoriteTableViewController : UITableViewController
 @property (nonatomic) NSMutableArray* favorites;
+@property NSMutableArray *aWholeDataUnit;
 +(FavoriteTableViewController*)singletonFav;
 @end

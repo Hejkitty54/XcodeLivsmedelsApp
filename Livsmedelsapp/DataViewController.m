@@ -149,6 +149,101 @@
     
 }
 
+-(void) getFirstInfoWithNumber:(int)number{
+    
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
+    
+    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
+    
+    NSURL *url = [NSURL URLWithString:s];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+                                                if (error) { NSLog(@"Error: %@",error); return;}
+                                                
+                                                NSError *jsonParseError = nil;
+                                                
+                                                NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+                                                
+                                                if(jsonParseError){
+                                                    NSLog(@"failed data : %@",jsonParseError);
+                                                    return;
+                                                }
+                                                
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    // get each detaljer
+                                                    
+                                                    NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
+                                                    
+                                                    NSString* water = [nutrientValues objectForKey:@"water"];
+                                                    
+                                                    NSString* protein = [nutrientValues objectForKey:@"protein"];
+                                                    
+                                                    NSString* fat = [nutrientValues objectForKey:@"fat"];
+                                                    
+                                                    [CompareViewController singletonCVC].firstData = @[water,fat,protein].mutableCopy;
+                                                    
+                                                    
+                                                });
+                                                
+                                            }];
+    [task resume];
+    
+}
+
+-(void) getSecondInfoWithNumber:(int)number{
+    
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/foodstuff/%d",number];
+    
+    //NSString *escaped = [s stringByAddingPercentEncodingWithAllowedCharacters:];
+    
+    NSURL *url = [NSURL URLWithString:s];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+                                                if (error) { NSLog(@"Error: %@",error); return;}
+                                                
+                                                NSError *jsonParseError = nil;
+                                                
+                                                NSDictionary *detail = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+                                                
+                                                if(jsonParseError){
+                                                    NSLog(@"failed data : %@",jsonParseError);
+                                                    return;
+                                                }
+                                                
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    // get each detaljer
+                                                    
+                                                    NSDictionary* nutrientValues = [detail objectForKey:@"nutrientValues"];
+                                                    
+                                                    NSString* water = [nutrientValues objectForKey:@"water"];
+                                                    
+                                                    NSString* protein = [nutrientValues objectForKey:@"protein"];
+                                                    
+                                                    NSString* fat = [nutrientValues objectForKey:@"fat"];
+                                                    
+                                                    [CompareViewController singletonCVC].secondData = @[water,fat,protein].mutableCopy;
+                                                    
+                                                    
+                                                });
+                                                
+                                            }];
+    [task resume];
+    
+}
+
+
 
 // show protein and energi i ShowViewController
 -(void) getDetailWithNumber:(int)number uiVC:(UIViewController*)vc{
@@ -206,11 +301,22 @@
                         svc.vitamin.text= [NSString stringWithFormat:@"%@",vitamin];
                         svc.salt.text = [NSString stringWithFormat:@"%@",salt];
                         svc.zink.text = [NSString stringWithFormat:@"%@",zink];
-                       
+                        
+                        // calculates nyttighetsvärde
+                        float n = [protein intValue]+[vitamin intValue]-[salt intValue];
+                        svc.calculate.text = [[NSString stringWithFormat:@"%f",n] substringToIndex:4];
                     
                     } else if ([vc isKindOfClass:[FavoriteDetailViewController class]]){
                     
-                        fvc.detail.text =[NSString stringWithFormat:@"%@",nutrientValues];
+                        fvc.protein.text= [NSString stringWithFormat:@"%@",protein];
+                        fvc.fat.text= [NSString stringWithFormat:@"%@",fett];
+                        fvc.vitaminC.text= [NSString stringWithFormat:@"%@",vitamin];
+                        fvc.salt.text = [NSString stringWithFormat:@"%@",salt];
+                        fvc.zink.text = [NSString stringWithFormat:@"%@",zink];
+                        
+                        // calculates nyttighetsvärde
+                        float n = [protein intValue]+[vitamin intValue]-[salt intValue];
+                        fvc.healthy.text = [[NSString stringWithFormat:@"%f",n] substringToIndex:4];
                    
                     
                     }
@@ -284,6 +390,60 @@
     [task resume];
     
 }
+//
+-(void)getUnit{
+    
+    //NSString *escaped = [@"http://www.matapi.se/foodstuff?nutrient" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *s = [NSString stringWithFormat:@"http://www.matapi.se/nutrient"];
+    NSURL *url = [NSURL URLWithString:s];
+    
+    
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                
+                                                if (error) { NSLog(@"Error: %@",error); return;}
+                                                
+                                                NSError *jsonParseError = nil;
+                                                
+                                                NSArray *result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonParseError];
+                                                
+                                                if(jsonParseError){
+                                                    NSLog(@"failed data : %@",jsonParseError);
+                                                    return;
+                                                }
+                                                //NSLog([result objectForKey:@"unit"]);
+                                                /*
+                                                NSDictionary* getDict= [[NSDictionary alloc]init];
+                                                
+                                                for(NSDictionary* dict in result)
+                                                {
+                                                    
+                                                    if([[dict objectForKey:@"name"] isEqualToString: @"Zink"])
+                                                    {
+                                                        getDict= dict;
+                                                    }
+                                                }
+                                                NSLog(@"%@",getDict);*/
+                                                
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    
+                                                    [LivsmedelTableViewController singletonTVC].aWholeDataUnit=result.mutableCopy;
+                                                    [[LivsmedelTableViewController singletonTVC].tableView reloadData];
+                                                    [FavoriteTableViewController singletonFav].aWholeDataUnit=result.mutableCopy;
+                                                    [[FavoriteTableViewController singletonFav].tableView reloadData];
+                                                    
+                                                });
+                                                
+                                            }];
+    
+    [task resume];
+    
+}
 
 // get all data from internet and save it in NSMutable array i LivsmedelTableViewController
 -(void)getAllData{
@@ -303,10 +463,7 @@
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                 
-        if (error) {
-            NSLog(@"Error: %@",error);
-            return;
-        }
+        if (error) { NSLog(@"Error: %@",error); return;}
         
         NSError *jsonParseError = nil;
         

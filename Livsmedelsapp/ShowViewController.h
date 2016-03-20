@@ -16,8 +16,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *vitamin;
 @property (weak, nonatomic) IBOutlet UILabel *salt;
 @property (weak, nonatomic) IBOutlet UILabel *zink;
+@property (weak, nonatomic) IBOutlet UILabel *proteinUnit;
+@property (weak, nonatomic) IBOutlet UILabel *fatUnit;
+@property (weak, nonatomic) IBOutlet UILabel *vitaminCUnit;
+@property (weak, nonatomic) IBOutlet UILabel *saltUnit;
+@property (weak, nonatomic) IBOutlet UILabel *zinkUnit;
+@property (weak, nonatomic) IBOutlet UILabel *calculate;
 @property(nonatomic) NSString* number;
 @property NSDictionary *oneFood;
 @property (weak, nonatomic) IBOutlet UISwitch *isFavorite;
-
+@property NSMutableArray *aWholeDataUnit;
 @end

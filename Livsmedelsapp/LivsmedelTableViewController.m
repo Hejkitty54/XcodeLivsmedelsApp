@@ -47,9 +47,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    
     if (!_aWholeData) {
         _aWholeData= [[NSMutableArray alloc]init];
 
+    }
+    if (!_aWholeDataUnit) {
+        _aWholeDataUnit= [[NSMutableArray alloc]init];
+        
     }
     if (!_energiData) {
         _energiData= [[NSMutableArray alloc]init];
@@ -58,8 +64,8 @@
     //get all data
     DataViewController *dataViewController =[[DataViewController alloc]init];
     [dataViewController getAllData];
-    NSLog(@"den här körs först? %lu",self.dataCount);
-    
+    [dataViewController getUnit];
+    NSLog(@"got unit? %@",self.aWholeDataUnit);
    
     /*
     // デフォルトの通知センターを取得する
@@ -69,6 +75,8 @@
     // この例だと、通知センターに"Tuchi"という名前の通知がされた時に、hogeメソッドを呼び出すという通知要求の登録を行っている。
     [_nc addObserver:self selector:@selector(hoge:) name:@"Tuchi" object:nil];
     */
+    
+    
    
     
     self.searchController=[[UISearchController alloc]initWithSearchResultsController:nil];
@@ -130,7 +138,6 @@
         _cell=[[CustomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    
     NSDictionary *activeFood;
     
     if(self.searchController.isActive&&self.searchController.searchBar.text.length > 0){
@@ -141,24 +148,45 @@
         activeFood = self.aWholeData[[indexPath row]];
        
     }
+    
     // get name for every cell
     NSString *getFoodName = [activeFood objectForKey:@"name"];
     NSString *getFoodNumber = [activeFood objectForKey:@"number"];
-    NSLog(@"%@",getFoodName);
-    NSLog(@"%@",getFoodNumber);
     
     // set name for every cell
     _cell.foodName.text = getFoodName;
     
-    
-     // set energi and protein for every cell
+    // set energi and protein for every cell
     [dataViewController getDetailWithNumberForCell:[getFoodNumber intValue] cell:_cell];
+    
+    //set unit for protein and energy
+    NSDictionary* getProteinUnit= [[NSDictionary alloc]init];
+    NSDictionary* getEnergyUnit= [[NSDictionary alloc]init];
+    
+    for(NSDictionary* dict in self.aWholeDataUnit)
+    {
+        if([[dict objectForKey:@"slug"] isEqualToString: @"protein"])
+        {
+            getProteinUnit= dict;
+        }
+        if([[dict objectForKey:@"slug"] isEqualToString: @"energyKj"])
+        {
+            getEnergyUnit= dict;
+        }
+    }
+    
+    NSString *proteinUnit = [getProteinUnit objectForKey:@"unit"];
+    NSString *energyUnit = [getEnergyUnit objectForKey:@"unit"];
+    _cell.proteinUnit.text = proteinUnit;
+    _cell.energiUnit.text = energyUnit;
+    
+    
+   
 
     _cell.foodData = activeFood;
 
     return _cell;
 }
-
 
 
 /*
@@ -212,8 +240,8 @@
         //NSString *oneName = [positionFood objectForKey:@"name"];
         
         showViewController.oneFood= positionFood;
-        
         showViewController.title = cell.foodData[@"name"];
+        showViewController.aWholeDataUnit=self.aWholeDataUnit;
         
         
     }

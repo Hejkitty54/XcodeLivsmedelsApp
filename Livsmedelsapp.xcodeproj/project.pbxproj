@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1518B33FC044A981445CE8B3 /* libPods-Livsmedelsapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F05963FB54DFE08831FEBA /* libPods-Livsmedelsapp.a */; };
 		7F1F28BF1C830A74004EAD0C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28BE1C830A74004EAD0C /* main.m */; };
 		7F1F28C21C830A74004EAD0C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28C11C830A74004EAD0C /* AppDelegate.m */; };
 		7F1F28C51C830A74004EAD0C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F28C41C830A74004EAD0C /* ViewController.m */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		47E50BEB67B8D1CE60B7CE0D /* Pods-Livsmedelsapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Livsmedelsapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-Livsmedelsapp/Pods-Livsmedelsapp.release.xcconfig"; sourceTree = "<group>"; };
 		7F1F28BA1C830A74004EAD0C /* Livsmedelsapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Livsmedelsapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F1F28BE1C830A74004EAD0C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7F1F28C01C830A74004EAD0C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -50,6 +52,8 @@
 		7F7CB3AE1C8CA79E001E8DDB /* FavoriteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteTableViewController.m; sourceTree = "<group>"; };
 		7F7CB3F91C8F6EE6001E8DDB /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
 		7F7CB3FA1C8F6EE6001E8DDB /* FavoriteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteDetailViewController.m; sourceTree = "<group>"; };
+		83F05963FB54DFE08831FEBA /* libPods-Livsmedelsapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Livsmedelsapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DB9313A225B552D4C48153D /* Pods-Livsmedelsapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Livsmedelsapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Livsmedelsapp/Pods-Livsmedelsapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1518B33FC044A981445CE8B3 /* libPods-Livsmedelsapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +73,8 @@
 			children = (
 				7F1F28BC1C830A74004EAD0C /* Livsmedelsapp */,
 				7F1F28BB1C830A74004EAD0C /* Products */,
+				FE94DEDA702E587B8CC4F354 /* Pods */,
+				CC4F8CE742AF7BDC67091704 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +126,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		CC4F8CE742AF7BDC67091704 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83F05963FB54DFE08831FEBA /* libPods-Livsmedelsapp.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FE94DEDA702E587B8CC4F354 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8DB9313A225B552D4C48153D /* Pods-Livsmedelsapp.debug.xcconfig */,
+				47E50BEB67B8D1CE60B7CE0D /* Pods-Livsmedelsapp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,9 +150,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7F1F28D11C830A74004EAD0C /* Build configuration list for PBXNativeTarget "Livsmedelsapp" */;
 			buildPhases = (
+				EC1BEF9FF361A913F47A3DF7 /* Check Pods Manifest.lock */,
 				7F1F28B61C830A74004EAD0C /* Sources */,
 				7F1F28B71C830A74004EAD0C /* Frameworks */,
 				7F1F28B81C830A74004EAD0C /* Resources */,
+				F2E7FD4AB1788299B022090E /* Embed Pods Frameworks */,
+				4697DC16254E912494F6A68D /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -184,6 +211,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4697DC16254E912494F6A68D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Livsmedelsapp/Pods-Livsmedelsapp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC1BEF9FF361A913F47A3DF7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F2E7FD4AB1788299B022090E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Livsmedelsapp/Pods-Livsmedelsapp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7F1F28B61C830A74004EAD0C /* Sources */ = {
@@ -308,6 +383,7 @@
 		};
 		7F1F28D21C830A74004EAD0C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DB9313A225B552D4C48153D /* Pods-Livsmedelsapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Livsmedelsapp/Info.plist;
@@ -319,6 +395,7 @@
 		};
 		7F1F28D31C830A74004EAD0C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47E50BEB67B8D1CE60B7CE0D /* Pods-Livsmedelsapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Livsmedelsapp/Info.plist;

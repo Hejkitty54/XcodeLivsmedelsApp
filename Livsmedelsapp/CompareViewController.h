@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataViewController.h"
+#import <GKBarGraph.h>
 
-@interface CompareViewController : UIViewController
+@interface CompareViewController : UIViewController <UITableViewDataSource,GKBarGraphDataSource>
++(CompareViewController*)singletonCVC;
+@property (nonatomic)NSMutableArray* firstData;
+@property (nonatomic)NSMutableArray* secondData;
 
 @end
