@@ -22,6 +22,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *healthy;
 @property (nonatomic) NSDictionary *favoriteFood;
 @property NSMutableArray *aWholeDataUnit;
-
-
 @end

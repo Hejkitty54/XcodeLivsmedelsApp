@@ -9,7 +9,6 @@
 #import "CompareViewController.h"
 #import "LivsmedelTableViewController.h"
 
-
 @interface CompareViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *compareTv;
 @property (weak, nonatomic) IBOutlet UITextField *first;
