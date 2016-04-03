@@ -10,13 +10,9 @@
 #import "FavoriteDetailViewController.h"
 
 @interface FavoriteTableViewController ()
-
 @end
 
 @implementation FavoriteTableViewController
-
-
-
 
 +(FavoriteTableViewController*)singletonFav{
     
@@ -25,22 +21,12 @@
     if(!theFav){
         theFav = [[super allocWithZone:nil]init];
     }
-    
     return theFav;
 }
 
 +(id) allocWithZone:(NSZone *)zone{
     return [self singletonFav];
 }
-
--(id) init{
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,9 +35,6 @@
         _favorites = [[NSMutableArray alloc]init];
     }
    
-    
-    
-     NSLog(@"favorite test");
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -61,10 +44,8 @@
 
 - (NSMutableArray*) favorites {
     if(!_favorites) {
-        
         _favorites  = [[NSMutableArray alloc] init];
     }
-    
     return _favorites;
 }
 
@@ -79,12 +60,10 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     return self.favorites.count;
 }
 
@@ -94,8 +73,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"favorite" forIndexPath:indexPath];
     
     cell.textLabel.text=[self.favorites[[indexPath row]] objectForKey:@"name"];
-  
-   
+    cell.textLabel.font = [UIFont systemFontOfSize:18];
+    cell.textLabel.numberOfLines=3;
     
     return cell;
 }

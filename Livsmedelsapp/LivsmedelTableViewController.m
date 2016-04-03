@@ -9,9 +9,7 @@
 #import "LivsmedelTableViewController.h"
 #import "ShowViewController.h"
 
-
 @interface LivsmedelTableViewController ()
-
 @property UISearchController *searchController;
 @property NSArray *searchResult;
 @property NSInteger isThereTest;
@@ -27,7 +25,6 @@
     if(!theTVC){
         theTVC = [[super allocWithZone:nil]init];
     }
-    
     return theTVC;
 }
 
@@ -35,19 +32,8 @@
     return [self singletonTVC];
 }
 
--(id) init{
-    self = [super init];
-    if (self) {
-        
-        
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
     
     if (!_aWholeData) {
         _aWholeData= [[NSMutableArray alloc]init];
@@ -61,24 +47,11 @@
         _energiData= [[NSMutableArray alloc]init];
         
     }
-    //get all data
+    //gets all food's data and sets it to
     DataViewController *dataViewController =[[DataViewController alloc]init];
     [dataViewController getAllData];
     [dataViewController getUnit];
-    NSLog(@"got unit? %@",self.aWholeDataUnit);
    
-    /*
-    // デフォルトの通知センターを取得する
-    _nc = [NSNotificationCenter defaultCenter];
-    
-    // 通知センターに通知要求を登録する
-    // この例だと、通知センターに"Tuchi"という名前の通知がされた時に、hogeメソッドを呼び出すという通知要求の登録を行っている。
-    [_nc addObserver:self selector:@selector(hoge:) name:@"Tuchi" object:nil];
-    */
-    
-    
-   
-    
     self.searchController=[[UISearchController alloc]initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.definesPresentationContext = YES;
@@ -90,13 +63,11 @@
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController{
     
     NSString* seachText = searchController.searchBar.text;
-    
     NSPredicate *findFoodWithName = [NSPredicate predicateWithFormat:@"name contains[c] %@",seachText];
     
     self.searchResult = [self.aWholeData filteredArrayUsingPredicate:findFoodWithName];
     
     [self.tableView reloadData];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,7 +87,6 @@
     if(self.searchController.isActive&&self.searchController.searchBar.text.length > 0){
          return self.searchResult.count;
     }else{
-    
         return self.aWholeData.count;
     }
 }
@@ -125,12 +95,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
  
-    
     DataViewController* dataViewController =[[DataViewController alloc]init];
     
-    
     static NSString *cellIdentifier = @"myCell";
-    // ska testa att inte spara ett cell
+    
     _cell = (CustomTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (!_cell)
@@ -144,22 +112,20 @@
         activeFood = self.searchResult[[indexPath row]];
         
     }else{
-
         activeFood = self.aWholeData[[indexPath row]];
-       
     }
     
-    // get name for every cell
+    // gets name for every cell
     NSString *getFoodName = [activeFood objectForKey:@"name"];
     NSString *getFoodNumber = [activeFood objectForKey:@"number"];
     
-    // set name for every cell
+    // sets name for every cell
     _cell.foodName.text = getFoodName;
     
-    // set energi and protein for every cell
+    // sets energi and protein for every cell
     [dataViewController getDetailWithNumberForCell:[getFoodNumber intValue] cell:_cell];
     
-    //set unit for protein and energy
+    //sets unit for protein and energy
     NSDictionary* getProteinUnit= [[NSDictionary alloc]init];
     NSDictionary* getEnergyUnit= [[NSDictionary alloc]init];
     
@@ -174,17 +140,12 @@
             getEnergyUnit= dict;
         }
     }
-    
     NSString *proteinUnit = [getProteinUnit objectForKey:@"unit"];
     NSString *energyUnit = [getEnergyUnit objectForKey:@"unit"];
     _cell.proteinUnit.text = proteinUnit;
     _cell.energiUnit.text = energyUnit;
     
-    
-   
-
     _cell.foodData = activeFood;
-
     return _cell;
 }
 
@@ -231,23 +192,17 @@
     
     ShowViewController *showViewController = segue.destinationViewController;
    
-    
-    if([segue.identifier isEqualToString:@"show"]){
+    if([segue.identifier isEqualToString:@"Show"]){
         CustomTableViewCell *cell = sender;
         
         NSIndexPath *path = [self.tableView indexPathForCell:cell];
         NSDictionary *positionFood = self.aWholeData[path.row];
-        //NSString *oneName = [positionFood objectForKey:@"name"];
         
         showViewController.oneFood= positionFood;
         showViewController.title = cell.foodData[@"name"];
         showViewController.aWholeDataUnit=self.aWholeDataUnit;
-        
-        
     }
-    
     else{
-        
         assert(NO);
     }
 }

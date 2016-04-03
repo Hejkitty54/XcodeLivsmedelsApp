@@ -16,7 +16,5 @@
 @property NSMutableArray *energiData;
 +(LivsmedelTableViewController*)singletonTVC;
 @property NSString *energi;
-@property NSInteger dataCount;
 @property CustomTableViewCell *cell;
-@property NSNotificationCenter *nc;
 @end

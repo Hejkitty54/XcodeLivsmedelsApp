@@ -15,10 +15,8 @@
 @interface DataViewController : UIViewController
 -(void)getAllData;
 -(void)getUnit;
--(void) getDetailWithNumber:(int)number uiVC:(UIViewController*)vc;
 -(void) getDetailWithNumberForCell:(int)number cell:(CustomTableViewCell*)cell;
+-(void) getDetailWithNumber:(int)number uiVC:(UIViewController*)vc;
 -(void) getFirstInfoWithNumber:(int)number;
 -(void) getSecondInfoWithNumber:(int)number;
--(void) sendDetailWithNumber:(int)number;
-@property(nonatomic)NSString *testString;
 @end

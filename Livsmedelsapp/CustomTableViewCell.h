@@ -15,9 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *protein;
 @property (weak, nonatomic) IBOutlet UILabel *proteinUnit;
 @property (weak, nonatomic) IBOutlet UIImageView *foodImg;
-
-
-
 @property NSDictionary *foodData;
 
 @end

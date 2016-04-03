@@ -36,6 +36,7 @@
 +(id) allocWithZone:(NSZone *)zone{
     return [self singletonCVC];
 }
+
 -(NSMutableArray*)firstData{
 
     if (!_firstData) {
@@ -55,19 +56,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.compareTv.dataSource = self;
-    
     self.data = [LivsmedelTableViewController singletonTVC].aWholeData;
-    
     
     //graph
     self.graph.dataSource =self;
-    
-    self.labels = @[@"water", @"fat", @"protein", @"water", @"fat", @"protein"];
-    
-    
-    
-    
-    
+    self.labels = @[@"water", @"fat", @"salt", @"water", @"fat", @"salt"];
+    self.graph.barWidth = 28;
+    self.graph.marginBar = 25;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,7 +80,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    //get cell
+    //gets a cell
     UITableViewCell *tvcell = [tableView dequeueReusableCellWithIdentifier: @"cid"];
     
     if (tvcell == nil) {
@@ -92,67 +88,81 @@
                                         reuseIdentifier: @"cid"];
     }
     
-    // get one food's name
+    // gets the name of the food
     NSDictionary* oneFood = self.data[[indexPath row]];
     NSString *getFoodName = [oneFood objectForKey:@"name"];
     
-    // show name on each cell
+    // shows the name on each cell
     tvcell.textLabel.text = getFoodName;
+    tvcell.textLabel.numberOfLines=3;
    
-    
-    // set tap recognizer
+    // sets a tap recognizer
     tvcell.userInteractionEnabled=YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAndGetName:)];
     [tvcell addGestureRecognizer:tap];
     
-    
     return tvcell;
-    
 }
 
 
 -(void)tapAndGetName:(UIGestureRecognizer *)gesture {
     
     CGPoint pos = [gesture locationInView:self.compareTv];
-    
     NSIndexPath *indexPath = [self.compareTv indexPathForRowAtPoint:pos];
-    
     UITableViewCell *cell = [self.compareTv cellForRowAtIndexPath:indexPath];
     
-    //get number for the food
+    //gets the number of the food
     NSDictionary* d =self.data[[indexPath row]];
     NSString* number = [d objectForKey:@"number"];
-    
-    NSLog(@"something? %@ number? %@",cell.textLabel.text,number);
     
     [self chooseName:(NSString*)cell.textLabel.text number:[number integerValue]];
 }
 
-// set name on label when user touch one food(set info also)
+// sets the food's name in the text field when user touches the food
 -(void)chooseName:(NSString*)name  number:(NSInteger)number {
     
     DataViewController* d = [[DataViewController alloc]init];
-    
-    
+    //if there are already foods in both fields
     if ((self.first.text.length>0 && self.second.text.length>0)) {
-        NSLog(@"deletes food and new food");
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Oops"
+                                                                       message:@"Delete at least one food and choose new food"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
     }
-    
+    // if there are no food in both fields
     else if (self.first.text.length==0 && self.second.text.length==0) {
         
         self.first.text = name;
         [d getFirstInfoWithNumber:(int)number];
         
-    } else if([self.first.text isEqualToString:name] || [self.second.text isEqualToString:name]){
-
-            NSLog(@"you can not choose same name");
+    }
+    // if user choose the same food
+    else if([self.first.text isEqualToString:name] || [self.second.text isEqualToString:name]){
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Oops"
+                                                                       message:@"You can not compare the same food"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
     
-    } else if (self.first.text.length>0 && self.second.text.length==0){
+    }
+    // if there is already a food in the first field
+    else if (self.first.text.length>0 && self.second.text.length==0){
         
         self.second.text=name;
         [d getSecondInfoWithNumber:(int)number];
         
-    } else if (self.second.text.length>0 && self.first.text.length==0){
+    }
+    // if there is already a food in the second field
+    else if (self.second.text.length>0 && self.first.text.length==0){
         
         self.first.text=name;
         [d getFirstInfoWithNumber:(int)number];
@@ -161,13 +171,8 @@
     
 }
 - (IBAction)compare:(id)sender {
-    
-    NSLog(@"first data is %@ ...",self.firstData);
-    
-    NSLog(@"second data is %@ ...",self.secondData);
-    
+   
     self.dataForGraph=@[].mutableCopy;
-    
     
     if(self.first.text.length > 0 && self.second.text.length > 0){
     
@@ -177,8 +182,6 @@
         for (int i =0; i < self.secondData.count; i++) {
             [self.dataForGraph addObject:[self.secondData objectAtIndex:i]];
         }
-        
-        NSLog(@"both is %@ ...",self.dataForGraph);
         
         [self.graph draw];
     
@@ -220,13 +223,14 @@
 
 - (UIColor *)colorForBarAtIndex:(NSInteger)index {
     id colors = @[[UIColor colorWithRed:0.55 green:0.70 blue:0.95 alpha:1.0],
-                  [UIColor colorWithRed:0.96 green:0.72 blue:0.36 alpha:1.0],
-                  [UIColor colorWithRed:0.95 green:0.40 blue:0.40 alpha:1.0],
+                  [UIColor colorWithRed:0.92 green:0.60 blue:0.60 alpha:1.0],
+                  [UIColor colorWithRed:0.58 green:0.77 blue:0.49 alpha:1.0],
                   [UIColor colorWithRed:0.55 green:0.70 blue:0.95 alpha:1.0],
-                  [UIColor colorWithRed:0.96 green:0.72 blue:0.36 alpha:1.0],
-                  [UIColor colorWithRed:0.95 green:0.40 blue:0.40 alpha:1.0]
+                  [UIColor colorWithRed:0.92 green:0.60 blue:0.60 alpha:1.0],
+                  [UIColor colorWithRed:0.58 green:0.77 blue:0.49 alpha:1.0]
                   ];
     return [colors objectAtIndex:index];
+    
 }
 
 /*

@@ -11,35 +11,11 @@
 #import "FavoriteTableViewController.h"
 
 @interface ShowViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *star;
-
+@property NSDictionary* foodObject;
 @end
 
 @implementation ShowViewController{
     int num;
-}
-
-- (IBAction)tap:(UITapGestureRecognizer *)sender {
-    
-    
-    CGPoint touchPosition = [sender locationInView:self.view];
-    
-    float diffX = touchPosition.x - self.star.center.x;
-    float diffY = touchPosition.y - self.star.center.y;
-    float distance = sqrt(diffX*diffX + diffY*diffY);
-    float t = distance/300.0f;
-    
-    [UIView beginAnimations:nil context:nil];
-    
-    [UIView setAnimationDuration:t];
-    [UIView setAnimationDelay:0.0];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    
-    self.star.center = touchPosition;
-    
-    [UIView commitAnimations];
-    
-    
 }
 
 - (void)viewDidLoad {
@@ -47,20 +23,18 @@
     
     DataViewController* d =[[DataViewController alloc]init];
     
-    // get a number from saved dictionary @{name number}
+    // gets a number of this food from saved dictionary
     num = [[self.oneFood objectForKey:@"number"] intValue];
     
     // shows detail
     [d getDetailWithNumber:num uiVC:self];
     
-    
-    //set unit
+    //sets units
     NSDictionary* getProteinUnit;
     NSDictionary* getFatUnit;
     NSDictionary* getVitaminCUnit;
     NSDictionary* getSaltUnit;
     NSDictionary* getZinkUnit;
-    
     
     for(NSDictionary* dict in self.aWholeDataUnit)
     {
@@ -102,41 +76,66 @@
         NSLog(@"No image found");
     }
     
+    UIBarButtonItem *camera = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                               target:self
+                               action:@selector(photo:)];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor orangeColor]];
     
-    CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat:(M_PI / 180) * 360];
-    rotationAnimation.duration = 1.0f;
-    rotationAnimation.repeatCount = HUGE_VALF;
-    [self.star.layer addAnimation:rotationAnimation forKey:@"rotateAnimation"];
-   
+    // sets a camera icon on the navigation bar
+    self.navigationItem.rightBarButtonItem = camera;
     
+    // sets foodObject
+    self.foodObject = @{@"name":self.title,@"number":[NSString stringWithFormat:@"%d",num]};
+    
+    NSInteger length = [FavoriteTableViewController singletonFav].favorites.count;
+    // if this food is in favorite list switch button will be ON.
+    for (int i =0; i < length ; i++){
+        if ([[FavoriteTableViewController singletonFav].favorites containsObject:self.foodObject]){
+            [self.isFavorite setOn:YES];
+        }
+    }
 }
 
 
 - (IBAction)isFavorite:(id)sender {
     
-    NSDictionary* foodObject = @{@"name":self.title,@"number":[NSString stringWithFormat:@"%d",num]};
-  
-    // if favorite is on it is added to favorites list in Favorite table view.
     if (self.isFavorite.on) {
-        
-        if (![[FavoriteTableViewController singletonFav].favorites containsObject:foodObject]) {
+        // adds foodObject to favorite list
+        if (![[FavoriteTableViewController singletonFav].favorites containsObject:self.foodObject]) {
             
-            [[FavoriteTableViewController singletonFav].favorites addObject:foodObject];
+            [[FavoriteTableViewController singletonFav].favorites addObject:self.foodObject];
             
             [[FavoriteTableViewController singletonFav].tableView reloadData];
             
-            NSLog(@"favorite %@ is added",self.title);
-        } else{
-            // pop up ? in label?
-            NSLog(@"%@ is already added to favorite",self.title);
-        }
+            //shows a message
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Message"
+                                                                           message:[NSString stringWithFormat:@"%@ is added to favorite list",self.title]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        } 
     } else {
-        
-        if ([[FavoriteTableViewController singletonFav].favorites containsObject:foodObject]) {
+        // deletes foodObject from favorite list.
+        if ([[FavoriteTableViewController singletonFav].favorites containsObject:self.foodObject]) {
               
-              [[FavoriteTableViewController singletonFav].favorites removeObject:foodObject];
+              [[FavoriteTableViewController singletonFav].favorites removeObject:self.foodObject];
               [[FavoriteTableViewController singletonFav].tableView reloadData];
+            
+            //shows a message
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Message"
+                                                                           message:[NSString stringWithFormat:@"%@ is removed from favorite list",self.title]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
           }
     }
 }
@@ -145,19 +144,55 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (IBAction)takePhoto:(id)sender {
+
+- (IBAction)photo:(id)sender {
     
-    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
-    picker.delegate = self;
-    [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
-    [self presentViewController:picker animated:YES completion:NULL];
-}
-- (IBAction)choosePhoto:(id)sender {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Camera"
+                                                                   message:@"You can choose from"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
     
-    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    [self presentViewController:picker animated:YES completion:nil];
+    UIAlertAction* takePhoto = [UIAlertAction actionWithTitle:@"Take photo" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              
+                                                              if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                                                                  
+                                                                  UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+                                                                  picker.delegate = self;
+                                                                  [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                                  [self presentViewController:picker animated:YES completion:NULL];
+                                                              } else{
+                                                                  
+                                                                  //shows a message
+                                                                  UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Message"
+                                                                                                                                 message:@"You don't have a camera."
+                                                                                                                          preferredStyle:UIAlertControllerStyleAlert];
+                                                                  
+                                                                  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                                                                        handler:^(UIAlertAction * action) {}];
+                                                                  
+                                                                  [alert addAction:defaultAction];
+                                                                  [self presentViewController:alert animated:YES completion:nil];
+                                                              }
+                                                          
+                                                          }];
+    UIAlertAction* choosePhoto = [UIAlertAction actionWithTitle:@"Choose from library" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                          
+                                                              UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+                                                              picker.delegate = self;
+                                                              picker.allowsEditing = YES;
+                                                              [self presentViewController:picker animated:YES completion:nil];
+                                                          
+                                                          }];
+    
+    UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:takePhoto];
+    [alert addAction:choosePhoto];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
@@ -184,9 +219,7 @@
     NSString *path = paths[0];
     
     return [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",self.title]];
-    
-    
-    
+
 }
 
 

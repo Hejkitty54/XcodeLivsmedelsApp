@@ -18,19 +18,7 @@
     
 }
 -(void)viewDidLayoutSubviews{
-    /*
     
-    UIView* square =[[UIView alloc]initWithFrame:CGRectMake(10, 10, 6, 6)];
-    [square setBackgroundColor:[UIColor orangeColor]];
-    [self.view addSubview:square];
-    
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    self.gravity = [[UIGravityBehavior alloc]initWithItems:@[square]];
-    
-    // add behavior
-    [self.animator addBehavior:self.gravity];*/
-
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,32 +28,21 @@
 
 
 -(void)save{
-    NSLog(@"save");
     NSUserDefaults *settings =[NSUserDefaults standardUserDefaults];
     
     FavoriteTableViewController *fav = [FavoriteTableViewController singletonFav];
     [settings setObject:fav.favorites.copy forKey:@"savedlist"];
-    
     [settings synchronize];
 }
 
 
 -(void)load{
-    NSLog(@"load");
     NSUserDefaults *settings =[NSUserDefaults standardUserDefaults];
     
     NSArray* savedlist = [settings objectForKey:@"savedlist"];
     NSMutableArray* savedMutableList = savedlist.mutableCopy;
     
-    if (savedlist.count>0) {
-        NSString* s = [savedlist[0] objectForKey:@"name"];
-        NSLog(@"load %@",s);
-    }
-    
     [FavoriteTableViewController singletonFav].favorites = savedMutableList;
-    
-    
-    
 }
 
 

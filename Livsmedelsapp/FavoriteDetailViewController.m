@@ -22,7 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    //drop some squares
     [self dropSquare:@"Left"];
     [self dropSquare:@"Left"];
     [self dropSquare:@"Left"];
@@ -30,15 +30,11 @@
     [self dropSquare:@"Right"];
     [self dropSquare:@"Right"];
     
-    [[UITabBar appearance] setBarTintColor:[UIColor redColor]];
-    //[[UITabBar appearance] setBackgroundImage:[UIImage new]];
-    
-    
+    //sets nutritional value
     DataViewController* d = [[DataViewController alloc]init];
     [d getDetailWithNumber:[[self.favoriteFood objectForKey:@"number"] intValue] uiVC:self];
     
-    
-    //set unit
+    //sets units
     NSDictionary* getProteinUnit;
     NSDictionary* getFatUnit;
     NSDictionary* getVitaminCUnit;
@@ -69,15 +65,13 @@
             getZinkUnit= dict;
         }
     }
-    
     self.proteinUnit.text = [getProteinUnit objectForKey:@"unit"];
     self.fatUnit.text = [getFatUnit objectForKey:@"unit"];
     self.vitaminCUnit.text =[getVitaminCUnit objectForKey:@"unit"];
     self.saltUnit.text =[getSaltUnit objectForKey:@"unit"];
     self.zinkUnit.text =[getZinkUnit objectForKey:@"unit"];
     
-    
-    
+    // rotate stars
     CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
     rotationAnimation.toValue = [NSNumber numberWithFloat:(M_PI / 180) * 360];
     rotationAnimation.duration = 3.0f;
@@ -122,15 +116,14 @@
     [self dropSquare:@"Right"];
 }
 
-
--(void)dropSquare:(NSString*)RorL {
-    
+// User can drop squares by touching on each side of the screen.
+// They can play how much they can pile squares by dropping squares quickly.
+-(void)dropSquare:(NSString*)RorL{
     CGFloat width = self.view.frame.size.width;
     
     UIView* square =[[UIView alloc]initWithFrame:CGRectMake(20, 20, 16, 16)];
     [square setBackgroundColor:[UIColor orangeColor]];
     
-        // 左たっぷすると左から四角が。右タップすると右から四角が。
         if ([RorL isEqualToString:@"Left"]) {
             square.center = CGPointMake(10, 50);
         } else{
@@ -139,7 +132,7 @@
     
     [self.view addSubview:square];
     
-    // add behavior
+    // adds behavior
     [self.animator addBehavior:self.gravity];
     [self.animator addBehavior:self.collision];
     

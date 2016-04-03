@@ -10,7 +10,6 @@
 
 @interface ShowViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *foodImg;
-//+(ShowViewController*)singletonSVC;
 @property (weak, nonatomic) IBOutlet UILabel *protein;
 @property (weak, nonatomic) IBOutlet UILabel *fat;
 @property (weak, nonatomic) IBOutlet UILabel *vitamin;

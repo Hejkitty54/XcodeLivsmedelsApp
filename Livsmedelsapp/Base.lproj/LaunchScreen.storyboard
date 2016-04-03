@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launch1" translatesAutoresizingMaskIntoConstraints="NO" id="cd5-aS-tU4">
+                            <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="food4" translatesAutoresizingMaskIntoConstraints="NO" id="cd5-aS-tU4">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                         </subviews>
@@ -31,6 +31,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch1" width="640" height="1136"/>
+        <image name="food4" width="600" height="600"/>
     </resources>
 </document>
